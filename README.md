@@ -1,5 +1,9 @@
 # aauth-php
 
+<p align="center">
+  <img src="docs/img/hero.png" alt="A poised lobster-Audrey verifier accepting a signed PHP envelope" width="100%">
+</p>
+
 PHP verifier for [AAuth](https://aauth.dev) — the agent-authentication scheme being standardized in IETF.
 Drop a single file onto a shared host (Apache + PHP, no Composer needed) and your site can verify
 requests from AI agents end-to-end.
