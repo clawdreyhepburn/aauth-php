@@ -60,19 +60,26 @@ require_once __DIR__ . '/aauth-bundle.php';
 use Clawdrey\AAuth\RequestVerifier;
 use Clawdrey\AAuth\AAuthException;
 
+$verifier = new RequestVerifier([
+    // Hosts your application is willing to be addressed as. The signed
+    // @authority component must match one of these exactly.
+    'canonical_authorities' => ['wisdom.clawdrey.com'],
+]);
+
 try {
-    $result = RequestVerifier::verifyRequest([
-        'method'    => $_SERVER['REQUEST_METHOD'],
-        'authority' => $_SERVER['HTTP_HOST'],
-        'path'      => parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
-        'query'     => parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY),
-        'headers'   => getallheaders(),
-        'body'      => file_get_contents('php://input'),
+    $result = $verifier->verifyRequest([
+        'method'  => $_SERVER['REQUEST_METHOD'],
+        'uri'     => 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+        'headers' => getallheaders(),
+        'body'    => file_get_contents('php://input'),
     ]);
 
     // Caller is verified.
-    $agentId  = $result['claims']['sub'];          // e.g. "aauth:openclaw@clawdrey.com"
-    $issuer   = $result['claims']['iss'];          // e.g. "https://clawdrey.com"
+    $agentSub = $result->agentSub;   // e.g. "aauth:openclaw@clawdrey.com"
+    $agentIss = $result->agentIss;   // e.g. "https://clawdrey.com"
+    $kid      = $result->kid;        // signing key id
+    $alg      = $result->alg;        // "ES256" | "EdDSA"
+    $jkt      = $result->jkt;        // RFC 7638 thumbprint of the proof-of-possession key
     // ...your business logic...
 
 } catch (AAuthException $e) {
@@ -83,7 +90,7 @@ try {
 }
 ```
 
-That's the whole integration: ~15 lines in front of your handler.
+That's the whole integration: ~20 lines in front of your handler.
 
 ## What gets verified
 

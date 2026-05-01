@@ -1,0 +1,70 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.0', '8.1', '8.2', '8.3', '8.4']
+
+    name: PHP ${{ matrix.php-version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: openssl, sodium, json, curl
+          coverage: none
+          tools: none
+
+      - name: Show PHP version and extensions
+        run: |
+          php --version
+          php -m | grep -E '^(openssl|sodium|json|curl)$' | sort
+
+      - name: Lint sources
+        run: |
+          set -e
+          for f in src/*.php scripts/*.php tests/*.php; do
+            php -l "$f"
+          done
+
+      - name: Build single-file bundle
+        run: php scripts/build-bundle.php
+
+      - name: Lint bundle
+        run: php -l dist/aauth-bundle.php
+
+      - name: Run all tests
+        run: php tests/run-all.php
+
+  bundle-drift:
+    name: bundle is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: openssl, sodium, json, curl
+          coverage: none
+
+      - name: Rebuild bundle and check for diff
+        run: |
+          php scripts/build-bundle.php
+          if ! git diff --exit-code -- dist/aauth-bundle.php; then
+            echo "::error::dist/aauth-bundle.php is stale. Run 'php scripts/build-bundle.php' and commit the result."
+            exit 1
+          fi

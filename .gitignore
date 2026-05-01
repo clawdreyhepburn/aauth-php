@@ -1,6 +1,12 @@
 vendor/
 composer.lock
 .phpunit.result.cache
-dist/
 *.log
 .DS_Store
+
+# Local JWKS cache produced by JwksFetcher at runtime.
+.jwks-cache/
+.aauth-cache/
+
+# We DO commit dist/aauth-bundle.php so users can download the single-file
+# release straight from the repo without needing a release artifact.
