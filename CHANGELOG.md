@@ -20,6 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CHANGELOG.md` (Keep a Changelog format).
 - GitHub Actions CI: lint + run-all on PHP 8.1 / 8.2 / 8.3 / 8.4, plus a bundle-drift
   job that fails if `dist/aauth-bundle.php` is out of sync with `src/`.
+- `SECURITY.md` — reporting policy, in-scope / out-of-scope vulnerability classes,
+  algorithm policy, security-relevant defaults, and a list of known weak spots.
+- Full Apache 2.0 `LICENSE` text (was previously a stub header pointing at the URL).
+- `docs/img/pipeline.svg` — README diagram showing the five-stage verification pipeline.
+- `JwksFetcher` now refuses non-HTTPS JWKS URIs by default. `http://` can be opted
+  back in for tests/fixtures via `new JwksFetcher(['allow_insecure_scheme' => true])`;
+  `file://`, `ftp://`, `javascript:`, and other dangerous schemes are always rejected,
+  even with the opt-in. 14 new tests cover the gate.
+- README "How it works" section walking through the five verification stages.
 
 ### Changed
 - README rewritten with quickstart, install paths (single-file + Composer), repo layout,
@@ -33,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `VerifyResult`. PHP 8.0 reached EOL in November 2023 and is not maintained upstream.
 - `dist/aauth-bundle.php` is now committed to the repository (was previously ignored)
   so shared-hosting users can grab the single-file release directly from GitHub.
+
+### Fixed
+- Removed deprecated `curl_close()` call (no-op since PHP 8.0, deprecated in 8.5)
+  from `JwksFetcher` to silence the deprecation warning on PHP 8.5.
 
 ## [0.1.0] — 2026-05-01
 

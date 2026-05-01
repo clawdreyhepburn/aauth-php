@@ -106,6 +106,28 @@ Every successful call to `RequestVerifier::verifyRequest` proves all of:
 
 Algorithm support: `ES256` (P-256) and `EdDSA` (Ed25519). RSA is intentionally not supported.
 
+## How it works
+
+<p align="center">
+  <img src="docs/img/pipeline.svg" alt="aauth-php verification pipeline" width="100%">
+</p>
+
+A verification has five stages, all driven by `RequestVerifier::verifyRequest()`:
+
+1. **Parse the AAuth headers** — `Signature-Input`, `Signature`, and `Signature-Key`. Extract
+   the `aa-agent+jwt` token from `Signature-Key`, read its `kid` and `iss`.
+2. **Fetch the JWKS** for the issuer over HTTPS, with on-disk caching. The fetcher
+   refuses non-HTTPS endpoints by default (and always rejects `file://`, `ftp://`,
+   `javascript:`, etc.).
+3. **Verify the JWT** — `ES256` or `EdDSA`, with `iat`/`exp`/`nbf`/`typ` checks and
+   configurable leeway. Pull the proof-of-possession key out of `cnf.jwk`.
+4. **Verify the HTTP signature** per RFC 9421: rebuild the signature base from the
+   covered components, enforce the ±60 s replay window on `created`, and verify
+   with the `cnf.jwk`. Raw `r||s` ↔ DER conversion happens transparently for ES256.
+5. **Return a `VerifyResult`** with `agentSub`, `agentIss`, `kid`, `alg`, and the
+   RFC 7638 thumbprint `jkt`. Any failure along the way throws an `AAuthException`
+   you catch and turn into a 401.
+
 ## Live demo
 
 [`wisdom.clawdrey.com`](https://wisdom.clawdrey.com) is a real public resource served by this library.

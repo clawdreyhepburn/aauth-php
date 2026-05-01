@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1f2a44"/>
+    </marker>
+    <linearGradient id="boxFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f5f3ee"/>
+    </linearGradient>
+    <linearGradient id="goodFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef9f1"/>
+      <stop offset="100%" stop-color="#f4e9d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" font-size="22" font-weight="600" fill="#1f2a44">
+    How aauth-php verifies a request
+  </text>
+
+  <!-- Steps -->
+  <g font-size="14" fill="#1f2a44">
+
+    <!-- 1. Incoming HTTP request -->
+    <rect x="30" y="100" width="180" height="110" rx="10" ry="10"
+          fill="url(#boxFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="120" y="130" text-anchor="middle" font-weight="600">Incoming request</text>
+    <text x="120" y="155" text-anchor="middle" font-size="12">Signature-Input</text>
+    <text x="120" y="172" text-anchor="middle" font-size="12">Signature</text>
+    <text x="120" y="189" text-anchor="middle" font-size="12">Signature-Key</text>
+
+    <!-- arrow -->
+    <line x1="215" y1="155" x2="265" y2="155" stroke="#1f2a44" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- 2. Parse + extract JWT -->
+    <rect x="270" y="100" width="200" height="110" rx="10" ry="10"
+          fill="url(#boxFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="370" y="130" text-anchor="middle" font-weight="600">Parse headers</text>
+    <text x="370" y="155" text-anchor="middle" font-size="12">extract aa-agent+jwt</text>
+    <text x="370" y="172" text-anchor="middle" font-size="12">read kid + iss</text>
+    <text x="370" y="189" text-anchor="middle" font-size="12">read covered components</text>
+
+    <line x1="475" y1="155" x2="525" y2="155" stroke="#1f2a44" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- 3. Fetch JWKS -->
+    <rect x="530" y="100" width="200" height="110" rx="10" ry="10"
+          fill="url(#boxFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="630" y="130" text-anchor="middle" font-weight="600">Fetch JWKS</text>
+    <text x="630" y="155" text-anchor="middle" font-size="12">two-step well-known</text>
+    <text x="630" y="172" text-anchor="middle" font-size="12">HTTPS-only</text>
+    <text x="630" y="189" text-anchor="middle" font-size="12">on-disk cache</text>
+
+    <line x1="735" y1="155" x2="785" y2="155" stroke="#1f2a44" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- 4. Verify JWT -->
+    <rect x="790" y="100" width="200" height="110" rx="10" ry="10"
+          fill="url(#boxFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="890" y="130" text-anchor="middle" font-weight="600">Verify JWT</text>
+    <text x="890" y="155" text-anchor="middle" font-size="12">ES256 / EdDSA</text>
+    <text x="890" y="172" text-anchor="middle" font-size="12">iat / exp / nbf / typ</text>
+    <text x="890" y="189" text-anchor="middle" font-size="12">extract cnf.jwk</text>
+
+    <!-- arrow down -->
+    <line x1="890" y1="215" x2="890" y2="245" stroke="#1f2a44" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- 5. Verify HTTP signature (across the bottom) -->
+    <rect x="270" y="250" width="720" height="100" rx="10" ry="10"
+          fill="url(#boxFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="630" y="280" text-anchor="middle" font-weight="600">Verify HTTP signature (RFC 9421)</text>
+    <text x="630" y="305" text-anchor="middle" font-size="12">build signature base from covered components &#8226; check ±60s replay window</text>
+    <text x="630" y="325" text-anchor="middle" font-size="12">verify signature with cnf.jwk &#8226; raw r||s &#8596; DER conversion as needed</text>
+
+    <!-- arrow left to ✓ -->
+    <line x1="265" y1="300" x2="220" y2="300" stroke="#1f2a44" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- ✓ result -->
+    <rect x="30" y="245" width="180" height="110" rx="10" ry="10"
+          fill="url(#goodFill)" stroke="#1f2a44" stroke-width="1.5"/>
+    <text x="120" y="275" text-anchor="middle" font-weight="600">VerifyResult</text>
+    <text x="120" y="300" text-anchor="middle" font-size="12">agentSub, agentIss</text>
+    <text x="120" y="317" text-anchor="middle" font-size="12">kid, alg, jkt</text>
+    <text x="120" y="335" text-anchor="middle" font-size="20" fill="#7a5a2c">&#10003;</text>
+
+  </g>
+
+  <!-- Footer caption -->
+  <text x="600" y="385" text-anchor="middle" font-size="11" fill="#5a5a5a" font-style="italic">
+    Anywhere along the path, an exception bubbles up &#8594; reject as 401. Nothing else gets through.
+  </text>
+</svg>

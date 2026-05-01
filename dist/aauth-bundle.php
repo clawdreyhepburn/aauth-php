@@ -930,9 +930,17 @@ final class JwksFetcher
     private int $timeoutMs;
     /** @var bool */
     private bool $verifyTls;
+    /** @var bool */
+    private bool $allowInsecureScheme;
 
     /**
-     * @param array{cache_dir?: string|null, ttl_seconds?: int, timeout_ms?: int, verify_tls?: bool} $opts
+     * @param array{
+     *   cache_dir?: string|null,
+     *   ttl_seconds?: int,
+     *   timeout_ms?: int,
+     *   verify_tls?: bool,
+     *   allow_insecure_scheme?: bool,
+     * } $opts
      */
     public function __construct(array $opts = [])
     {
@@ -940,6 +948,9 @@ final class JwksFetcher
         $this->defaultTtl = $opts['ttl_seconds'] ?? 3600;
         $this->timeoutMs = $opts['timeout_ms'] ?? 5000;
         $this->verifyTls = $opts['verify_tls'] ?? true;
+        // Off by default: refusing http:// JWKS endpoints is a hard requirement
+        // for production deployments. Tests and dev fixtures opt in explicitly.
+        $this->allowInsecureScheme = $opts['allow_insecure_scheme'] ?? false;
 
         if (!is_dir($this->cacheDir)) {
             @mkdir($this->cacheDir, 0700, true);
@@ -1007,6 +1018,7 @@ final class JwksFetcher
      */
     public function fetchJson(string $url): array
     {
+        $this->assertSafeScheme($url);
         $cacheFile = $this->cacheDir . '/' . hash('sha256', $url) . '.json';
 
         if (is_readable($cacheFile)) {
@@ -1056,14 +1068,13 @@ final class JwksFetcher
 
         $response = curl_exec($ch);
         if ($response === false) {
-            $err = curl_error($ch);
-            curl_close($ch);
-            throw new KeyResolutionException("HTTP fetch failed for $url: $err");
+            // curl_close() is a no-op since PHP 8.0 and deprecated in 8.5;
+            // we rely on GC of $ch when it goes out of scope.
+            throw new KeyResolutionException("HTTP fetch failed for $url: " . curl_error($ch));
         }
 
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        // curl_close is a no-op since PHP 8.0 and deprecated in 8.5; rely on GC.
 
         if ($status < 200 || $status >= 300) {
             throw new KeyResolutionException("HTTP $status for $url");
@@ -1087,6 +1098,24 @@ final class JwksFetcher
             return (int)$m[1];
         }
         return null;
+    }
+
+    /**
+     * Reject any URL that isn't HTTPS unless the caller has explicitly
+     * opted into insecure-scheme fetching (for tests / local fixtures).
+     */
+    private function assertSafeScheme(string $url): void
+    {
+        $scheme = strtolower((string)parse_url($url, PHP_URL_SCHEME));
+        if ($scheme === 'https') {
+            return;
+        }
+        if ($scheme === 'http' && $this->allowInsecureScheme) {
+            return;
+        }
+        throw new KeyResolutionException(
+            "refusing to fetch JWKS over insecure scheme '$scheme': $url"
+        );
     }
 }
 
