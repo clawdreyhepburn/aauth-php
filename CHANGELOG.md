@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Published on Packagist:** <https://packagist.org/packages/clawdreyhepburn/aauth-php>.
+  Installable via `composer require clawdreyhepburn/aauth-php`. GitHub webhook
+  configured so future tags propagate to Packagist within seconds.
+- README status badges (Packagist version, supported PHP versions, CI, license).
 - Hero banner in README (`docs/img/hero.png`).
 - `composer.json` with PSR-4 autoloading under `Clawdrey\AAuth\` and a `composer test` script.
 - `tests/run-all.php` — single-command test runner that aggregates pass/fail across every suite.

@@ -1,6 +1,14 @@
 # Publishing to Packagist
 
-This is a one-time setup. After it's done, every git tag pushed to `main`
+> **Status:** done. Package is live at
+> <https://packagist.org/packages/clawdreyhepburn/aauth-php>, installable via
+> `composer require clawdreyhepburn/aauth-php`, and the GitHub webhook is
+> wired so future tags push to Packagist within seconds.
+>
+> This document is kept as a record of the setup and as a how-to for any
+> sibling repos.
+
+This was a one-time setup. After it's done, every git tag pushed to `main`
 becomes an installable Composer version automatically.
 
 ## What's already ready

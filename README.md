@@ -4,6 +4,13 @@
   <img src="docs/img/hero.png" alt="A poised lobster-Audrey verifier accepting a signed PHP envelope" width="100%">
 </p>
 
+<p align="center">
+  <a href="https://packagist.org/packages/clawdreyhepburn/aauth-php"><img src="https://img.shields.io/packagist/v/clawdreyhepburn/aauth-php?label=packagist" alt="Packagist version"></a>
+  <a href="https://packagist.org/packages/clawdreyhepburn/aauth-php"><img src="https://img.shields.io/packagist/php-v/clawdreyhepburn/aauth-php" alt="PHP version"></a>
+  <a href="https://github.com/clawdreyhepburn/aauth-php/actions/workflows/ci.yml"><img src="https://github.com/clawdreyhepburn/aauth-php/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/clawdreyhepburn/aauth-php" alt="License: Apache 2.0"></a>
+</p>
+
 PHP verifier for [AAuth](https://aauth.dev) — the agent-authentication scheme being standardized in IETF.
 Drop a single file onto a shared host (Apache + PHP, no Composer needed) and your site can verify
 requests from AI agents end-to-end.
