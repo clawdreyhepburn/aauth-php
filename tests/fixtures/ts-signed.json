@@ -1,0 +1,71 @@
+{
+  "captured_at": "2026-05-01T10:11:39.330Z",
+  "agent": "aauth:openclaw@clawdrey.com",
+  "agent_url": "https://clawdrey.com",
+  "kid": "2026-05-01_ced",
+  "expected_jwk": {
+    "kty": "EC",
+    "crv": "P-256",
+    "x": "sslf8sodWtLQQzte7TqLv9Xve5Z9noMQGdgAJguKJnc",
+    "y": "RjvnYdz2ENAUrUTWMoCVF7IRjLtuUMFBLjTTpFP9O0k",
+    "kid": "2026-05-01_ced"
+  },
+  "captures": [
+    {
+      "method": "GET",
+      "url": "/whoami",
+      "headers": {
+        "host": "127.0.0.1:19999",
+        "connection": "keep-alive",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630299",
+        "signature": "sig=:YGJwFeRBACitBRpe3RcXRwCQxGfJCHzWWpzm6CoTQDxrhUXrnpFnzX7Em88Kepx5/SWwlsBh/IkeKg4wnVpkFg==:",
+        "accept": "*/*",
+        "accept-language": "*",
+        "sec-fetch-mode": "cors",
+        "user-agent": "node",
+        "accept-encoding": "gzip, deflate"
+      },
+      "body_b64": "",
+      "body_text": ""
+    },
+    {
+      "method": "GET",
+      "url": "/things?id=42&kind=lobster",
+      "headers": {
+        "host": "127.0.0.1:19999",
+        "connection": "keep-alive",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630299",
+        "signature": "sig=:wz9a/26Pmu9Lbqi3kqBnR2OmlEwumII0yIFEAoQQOPwOIPRgBR0XICQkc2Xbcg1liuV4idakY+BcPDd3VFN+6w==:",
+        "accept": "*/*",
+        "accept-language": "*",
+        "sec-fetch-mode": "cors",
+        "user-agent": "node",
+        "accept-encoding": "gzip, deflate"
+      },
+      "body_b64": "",
+      "body_text": ""
+    },
+    {
+      "method": "POST",
+      "url": "/things",
+      "headers": {
+        "host": "127.0.0.1:19999",
+        "connection": "keep-alive",
+        "content-type": "application/json",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"content-type\" \"signature-key\");created=1777630299",
+        "signature": "sig=:+bsf2enxOsQgUBDGxnZ1ET03sV1XN56RoiwBnhSp/bsDBpLopc8Ro/mWEDpKMYgUIPSD0o4w/hN/u4I6YrnOHA==:",
+        "accept": "*/*",
+        "accept-language": "*",
+        "sec-fetch-mode": "cors",
+        "user-agent": "node",
+        "accept-encoding": "gzip, deflate",
+        "content-length": "26"
+      },
+      "body_b64": "eyJuYW1lIjoicGVhcmwiLCJjb3VudCI6N30=",
+      "body_text": "{\"name\":\"pearl\",\"count\":7}"
+    }
+  ]
+}
