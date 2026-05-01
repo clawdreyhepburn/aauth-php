@@ -139,6 +139,16 @@ curl -i https://wisdom.clawdrey.com/wisdom/foundations
 # With AAuth — call from an AAuth-capable client like the openclaw TS agent
 ```
 
+## Documentation
+
+- [`docs/COOKBOOK.md`](docs/COOKBOOK.md) — ten practical recipes (single endpoint,
+  reusable middleware, optional auth, allowlists, WordPress, Slim 4, Laravel,
+  local dev, custom JWKS cache, error handling, TS-client smoke test).
+- [`docs/DESIGN.md`](docs/DESIGN.md) — architecture and design decisions.
+- [`docs/PACKAGIST.md`](docs/PACKAGIST.md) — publishing notes for maintainers.
+- [`SECURITY.md`](SECURITY.md) — reporting policy and security defaults.
+- [`CHANGELOG.md`](CHANGELOG.md) — release notes.
+
 ## Repository layout
 
 ```

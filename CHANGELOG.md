@@ -29,6 +29,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `file://`, `ftp://`, `javascript:`, and other dangerous schemes are always rejected,
   even with the opt-in. 14 new tests cover the gate.
 - README "How it works" section walking through the five verification stages.
+- `docs/COOKBOOK.md` — ten practical recipes (single endpoint, reusable middleware,
+  optional auth, allowlists, WordPress, Slim 4, Laravel, local dev, custom JWKS
+  cache, error handling, TS-client smoke test). All `php` code blocks are linted in CI.
+- `docs/PACKAGIST.md` — step-by-step Packagist publishing instructions for maintainers.
+- `scripts/lint-doc-snippets.php` — extracts every ```php code block from README and
+  COOKBOOK and runs `php -l` on each, so doc drift breaks CI.
+- `scripts/deploy-wisdom.sh` — one-command deploy for `wisdom.clawdrey.com`. Rebuilds
+  the bundle, runs the test suite, rsyncs with explicit chmod (Apache requires 644/755),
+  fixes perms server-side as belt-and-suspenders, and smoke-tests four canonical URLs.
 
 ### Changed
 - README rewritten with quickstart, install paths (single-file + Composer), repo layout,

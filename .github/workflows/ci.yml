@@ -49,6 +49,12 @@ jobs:
       - name: Run all tests
         run: php tests/run-all.php
 
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Lint doc snippets
+        run: php scripts/lint-doc-snippets.php
+
   bundle-drift:
     name: bundle is up to date
     runs-on: ubuntu-latest
