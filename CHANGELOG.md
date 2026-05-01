@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-05-01
+
+### Changed
+- Removed maintainer email from `README.md`, `composer.json` author block,
+  `SECURITY.md`, and the `dist/aauth-bundle.php` header. `SECURITY.md` now
+  directs vulnerability reports through GitHub private security advisories.
+  Bundle rebuilt; 193 tests still pass.
+
 ### Added
 - **Published on Packagist:** <https://packagist.org/packages/clawdreyhepburn/aauth-php>.
   Installable via `composer require clawdreyhepburn/aauth-php`. GitHub webhook
@@ -107,5 +115,6 @@ Initial release. Built overnight on 2026-04-30 → 2026-05-01.
 - `wisdom-deploy/` — live demo deployed to `https://wisdom.clawdrey.com` (DreamHost
   shared hosting), serving `wisdom/foundations` and `wisdom/situational` under AAuth.
 
-[Unreleased]: https://github.com/clawdreyhepburn/aauth-php/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/clawdreyhepburn/aauth-php/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/clawdreyhepburn/aauth-php/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/clawdreyhepburn/aauth-php/releases/tag/v0.1.0
