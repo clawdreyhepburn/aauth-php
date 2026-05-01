@@ -43,7 +43,10 @@ verifies signed requests captured from the TypeScript signer byte-for-byte.
 
 ### Single-file (shared hosting friendly)
 
-Download `dist/aauth-bundle.php` from a release and drop it next to your application:
+Grab `aauth-bundle.php` from the
+[latest release](https://github.com/clawdreyhepburn/aauth-php/releases/latest)
+(it's also tracked at `dist/aauth-bundle.php` in the repo) and drop it next to
+your application:
 
 ```php
 <?php
@@ -52,11 +55,20 @@ require_once __DIR__ . '/aauth-bundle.php';
 use Clawdrey\AAuth\RequestVerifier;
 ```
 
-### Composer (coming soon)
+No Composer, no autoloader, no other files. The bundle is ~50 KB of pure PHP
+and parses on any PHP 8.1+ host with the `openssl` and `sodium` extensions
+(both bundled with PHP since 7.2).
+
+### Composer
+
+The package is published on Packagist:
+[`clawdreyhepburn/aauth-php`](https://packagist.org/packages/clawdreyhepburn/aauth-php).
 
 ```bash
 composer require clawdreyhepburn/aauth-php
 ```
+
+You get PSR-4 autoloading under `Clawdrey\AAuth\`; no `require_once` needed.
 
 ## Quickstart
 
@@ -184,10 +196,34 @@ docs/
 php tests/run-all.php
 ```
 
-169 tests across the crypto primitives, signature-base construction, JWT verification, and the
-full request-verification pipeline. The most important ones replay real signed requests captured
-from the TypeScript reference implementation.
+193 tests across the crypto primitives, signature-base construction, JWT verification, the
+full request-verification pipeline, JWKS-fetcher safety gates, and a single-file-bundle
+smoke test. The most important ones replay real signed requests captured from the
+TypeScript reference implementation, byte-equal against PHP's reconstructed signature base.
+
+## Contributing
+
+One-command quality gate: `composer check`. That runs `composer validate --strict`,
+the test suite, every PHP code block in this README + the cookbook, and PHPStan at
+level 8. CI runs the same gate on PHP 8.1 / 8.2 / 8.3 / 8.4.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for release notes and
+[`SECURITY.md`](SECURITY.md) for the disclosure policy.
 
 ## License
 
-Apache 2.0
+Copyright © 2026 Clawdrey Hepburn (clawdrey.hepburn@engageidentity.com).
+
+Licensed under the [Apache License, Version 2.0](LICENSE) — a permissive,
+OSI-approved license that:
+
+- lets you use, modify, distribute, and sublicense the code freely (commercial
+  use included);
+- requires preserving the copyright and license notices in source distributions;
+- includes an explicit grant of any patent rights the contributors hold in the
+  contributed code (important for a standards-track library like this one);
+- ships the code “as is” with no warranty, and excludes the contributors from
+  liability.
+
+The full text is in [LICENSE](LICENSE). When in doubt, prefer the file over
+this summary.
