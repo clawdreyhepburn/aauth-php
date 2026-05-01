@@ -34,6 +34,7 @@ final class JwtVerifier
      *   expected_typ?: string|null,
      *   audience?: string|null,
      *   issuer?: string|null,
+     *   now?: int,
      * } $opts
      *
      * @return array{header: array<string, mixed>, payload: array<string, mixed>}
@@ -95,8 +96,10 @@ final class JwtVerifier
         $signingInput = $h64 . '.' . $p64;
         self::verifySignature($alg, $signingInput, $sig, $jwk);
 
-        // Time validation — IETF JWT spec §4.1.4/4.1.5
-        $now = time();
+        // Time validation — IETF JWT spec §4.1.4/4.1.5.
+        // `now` is overridable for tests and for callers that want to pin
+        // verification to a specific instant (e.g., replay-window checks).
+        $now = isset($opts['now']) && is_int($opts['now']) ? $opts['now'] : time();
         if (isset($payload['exp'])) {
             if (!is_int($payload['exp']) || $payload['exp'] + $leeway < $now) {
                 throw new JwtException('JWT expired');

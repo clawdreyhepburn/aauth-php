@@ -60,10 +60,16 @@ $realJwt = $m[1];
 // would publish at clawdrey.com/.well-known/jwks.json.
 $agentJwk = $fixture['expected_jwk'];
 
+// Pin verification time to the moment the fixture was captured so the test stays
+// deterministic even after the agent token's short lifetime expires.
+[, $p64Tmp,] = explode('.', $realJwt);
+$fixturePayload = json_decode(JwkConverter::base64UrlDecode($p64Tmp), true);
+$fixtureNow = $fixturePayload['iat'] ?? $fixture['captured_at_unix'] ?? time();
+
 $result = JwtVerifier::verify(
     $realJwt,
     fn($kid, $iss) => $kid === $agentJwk['kid'] ? $agentJwk : null,
-    ['expected_typ' => 'aa-agent+jwt']
+    ['expected_typ' => 'aa-agent+jwt', 'now' => $fixtureNow]
 );
 assertEq('aa-agent+jwt', $result['header']['typ'], 'verified header typ');
 assertEq('aauth:openclaw@clawdrey.com', $result['payload']['sub'], 'verified payload sub');
@@ -77,7 +83,7 @@ assertEq('EC', $result['payload']['cnf']['jwk']['kty'], 'cnf.jwk is EC');
 echo "\nTampered tokens:\n";
 
 assertThrowsContains(
-    function () use ($realJwt, $agentJwk) {
+    function () use ($realJwt, $agentJwk, $fixtureNow) {
         // flip a bit in the payload
         [$h, $p, $s] = explode('.', $realJwt);
         $rawPayload = JwkConverter::base64UrlDecode($p);
@@ -86,7 +92,8 @@ assertThrowsContains(
         $tampered = "$h.$newP.$s";
         JwtVerifier::verify(
             $tampered,
-            fn($kid, $iss) => $kid === $agentJwk['kid'] ? $agentJwk : null
+            fn($kid, $iss) => $kid === $agentJwk['kid'] ? $agentJwk : null,
+            ['now' => $fixtureNow]
         );
     },
     'verification failed',
@@ -94,13 +101,14 @@ assertThrowsContains(
 );
 
 assertThrowsContains(
-    function () use ($realJwt, $agentJwk) {
+    function () use ($realJwt, $agentJwk, $fixtureNow) {
         // truncate the signature
         [$h, $p, $s] = explode('.', $realJwt);
         $tampered = "$h.$p." . substr($s, 0, 10);
         JwtVerifier::verify(
             $tampered,
-            fn($kid, $iss) => $kid === $agentJwk['kid'] ? $agentJwk : null
+            fn($kid, $iss) => $kid === $agentJwk['kid'] ? $agentJwk : null,
+            ['now' => $fixtureNow]
         );
     },
     'must be 64',
@@ -116,7 +124,7 @@ assertThrowsContains(
     fn() => JwtVerifier::verify(
         $realJwt,
         fn($kid) => $kid === $agentJwk['kid'] ? $agentJwk : null,
-        ['expected_typ' => 'something-else']
+        ['expected_typ' => 'something-else', 'now' => $fixtureNow]
     ),
     'typ mismatch',
     'wrong expected_typ rejected'
@@ -126,7 +134,7 @@ assertThrowsContains(
     fn() => JwtVerifier::verify(
         $realJwt,
         fn($kid) => $kid === $agentJwk['kid'] ? $agentJwk : null,
-        ['issuer' => 'https://wrong.example']
+        ['issuer' => 'https://wrong.example', 'now' => $fixtureNow]
     ),
     'iss mismatch',
     'wrong issuer rejected'
@@ -150,7 +158,8 @@ $wrongJwk = [
 assertThrowsContains(
     fn() => JwtVerifier::verify(
         $realJwt,
-        fn($kid) => $wrongJwk
+        fn($kid) => $wrongJwk,
+        ['now' => $fixtureNow]
     ),
     'verification failed',
     'wrong public key rejected'

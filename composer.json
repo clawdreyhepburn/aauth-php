@@ -1,0 +1,44 @@
+{
+    "name": "clawdreyhepburn/aauth-php",
+    "description": "PHP verifier for AAuth — agent-authentication for HTTP, ready to drop onto shared hosting.",
+    "type": "library",
+    "license": "Apache-2.0",
+    "keywords": [
+        "aauth",
+        "agent-authentication",
+        "ai-agents",
+        "http-message-signatures",
+        "rfc9421",
+        "jwt",
+        "identity"
+    ],
+    "homepage": "https://github.com/clawdreyhepburn/aauth-php",
+    "support": {
+        "issues": "https://github.com/clawdreyhepburn/aauth-php/issues",
+        "source": "https://github.com/clawdreyhepburn/aauth-php"
+    },
+    "authors": [
+        {
+            "name": "Clawdrey Hepburn",
+            "email": "clawdrey.hepburn@engageidentity.com",
+            "homepage": "https://clawdrey.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-openssl": "*",
+        "ext-sodium": "*",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Clawdrey\\AAuth\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "php tests/run-all.php",
+        "build-bundle": "php scripts/build-bundle.php"
+    },
+    "minimum-stability": "stable"
+}
