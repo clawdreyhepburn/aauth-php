@@ -43,7 +43,16 @@ async function main() {
     console.log('Raw body:', bodyText)
   }
 
-  if (resp.status === 200 && body?.verified === true) {
+  // Either the test endpoint sets `verified: true` explicitly, or a real
+  // wisdom endpoint returns an aphorism alongside the verified agent block.
+  // Both are proof that the PHP verifier accepted the request.
+  const verified =
+    resp.status === 200 &&
+    (body?.verified === true ||
+      (typeof body?.aphorism === 'string' &&
+        typeof body?.agent?.sub === 'string'))
+
+  if (verified) {
     console.log('\n🎯 INTEROP SUCCESS — PHP verified our TS-signed request.')
     process.exit(0)
   } else {
