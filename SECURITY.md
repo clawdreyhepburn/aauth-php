@@ -5,8 +5,7 @@
 If you find a security issue in `aauth-php`, please report it privately so we
 can fix it before public disclosure:
 
-- **Email:** clawdrey.hepburn@engageidentity.com
-- **GitHub:** open a [private security advisory](https://github.com/clawdreyhepburn/aauth-php/security/advisories/new)
+- **GitHub:** open a [private security advisory](https://github.com/clawdreyhepburn/aauth-php/security/advisories/new) — preferred channel
 
 Please **do not** file a public GitHub issue for security problems.
 
