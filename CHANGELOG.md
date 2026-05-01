@@ -17,10 +17,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `JwtVerifier::verify()` now accepts an optional `now` value for deterministic time
   validation. Tests against the captured fixture pin to its `iat` so they don't rot when
   the agent JWT's short lifetime expires.
+- `CHANGELOG.md` (Keep a Changelog format).
+- GitHub Actions CI: lint + run-all on PHP 8.1 / 8.2 / 8.3 / 8.4, plus a bundle-drift
+  job that fails if `dist/aauth-bundle.php` is out of sync with `src/`.
 
 ### Changed
 - README rewritten with quickstart, install paths (single-file + Composer), repo layout,
-  algorithm support, and an explicit "what gets verified" guarantee list.
+  algorithm support, and an explicit "what gets verified" guarantee list. Quickstart now
+  matches the real instance-based API (`new RequestVerifier([...])`) instead of a
+  non-existent static call.
+- `dist/aauth-bundle.php` is now reproducible: the build banner no longer embeds a
+  generation timestamp, so identical sources produce a byte-identical bundle. CI uses this
+  to detect drift.
+- **Minimum PHP version raised to 8.1** to allow `readonly` constructor promotion in
+  `VerifyResult`. PHP 8.0 reached EOL in November 2023 and is not maintained upstream.
+- `dist/aauth-bundle.php` is now committed to the repository (was previously ignored)
+  so shared-hosting users can grab the single-file release directly from GitHub.
 
 ## [0.1.0] — 2026-05-01
 
