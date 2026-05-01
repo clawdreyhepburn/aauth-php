@@ -1,14 +1,20 @@
 {
-  "captured_at": "2026-05-01T10:11:39.330Z",
+  "captured_at": "2026-05-01T10:20:43.245Z",
   "agent": "aauth:openclaw@clawdrey.com",
   "agent_url": "https://clawdrey.com",
   "kid": "2026-05-01_ced",
   "expected_jwk": {
-    "kty": "EC",
+    "alg": "ES256",
     "crv": "P-256",
-    "x": "sslf8sodWtLQQzte7TqLv9Xve5Z9noMQGdgAJguKJnc",
-    "y": "RjvnYdz2ENAUrUTWMoCVF7IRjLtuUMFBLjTTpFP9O0k",
-    "kid": "2026-05-01_ced"
+    "kty": "EC",
+    "use": "sig",
+    "x": "3awKB_SWQRyOXTvkVJQJW3KGuGGxwoWDRbbbVNm5x8c",
+    "y": "3_zaWum2deAWEZwmokysgioJvcu3slh2JulhQ6ugDnk",
+    "kid": "2026-05-01_ced",
+    "aauth": {
+      "device": "clawdreys-mac-mini",
+      "created": "2026-05-01"
+    }
   },
   "captures": [
     {
@@ -17,9 +23,9 @@
       "headers": {
         "host": "127.0.0.1:19999",
         "connection": "keep-alive",
-        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
-        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630299",
-        "signature": "sig=:YGJwFeRBACitBRpe3RcXRwCQxGfJCHzWWpzm6CoTQDxrhUXrnpFnzX7Em88Kepx5/SWwlsBh/IkeKg4wnVpkFg==:",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiIzZGI0MTg5OS05YzU0LTRkOWUtODRhYy01MDFkNzI0YjcxMzAiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6IlRyc1VjNENxNjJuZmw4MC1pTFBhaUhXV3FSOFJNNVhwbGVlbVVKQ2ItcVUiLCJ5IjoiQnh5QVNvdHpvS29Ra1dFZFE1RmFuR0tpSjNWN1N3RmlPUjI5UFJDc19LcyIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzA4NDMsImV4cCI6MTc3NzYzMTQ0MywicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9._3mt7uuP1WX20jSkUZhDwcTsXzPEUzfROo_pQEYCXx7oecExNlZ42kOMUV2L4IEgF1owfOy1Wcy3jfUI6-zqyg\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630843",
+        "signature": "sig=:M3EVEhRTRkOIlxsjsmTsiCPtB9G+o3VhS5lrANb1Hfhnvdv4Hs3B8HBC9xnBqaz+h0o0V0cnvKXurAfCt5MP8Q==:",
         "accept": "*/*",
         "accept-language": "*",
         "sec-fetch-mode": "cors",
@@ -35,9 +41,9 @@
       "headers": {
         "host": "127.0.0.1:19999",
         "connection": "keep-alive",
-        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
-        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630299",
-        "signature": "sig=:wz9a/26Pmu9Lbqi3kqBnR2OmlEwumII0yIFEAoQQOPwOIPRgBR0XICQkc2Xbcg1liuV4idakY+BcPDd3VFN+6w==:",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiIzZGI0MTg5OS05YzU0LTRkOWUtODRhYy01MDFkNzI0YjcxMzAiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6IlRyc1VjNENxNjJuZmw4MC1pTFBhaUhXV3FSOFJNNVhwbGVlbVVKQ2ItcVUiLCJ5IjoiQnh5QVNvdHpvS29Ra1dFZFE1RmFuR0tpSjNWN1N3RmlPUjI5UFJDc19LcyIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzA4NDMsImV4cCI6MTc3NzYzMTQ0MywicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9._3mt7uuP1WX20jSkUZhDwcTsXzPEUzfROo_pQEYCXx7oecExNlZ42kOMUV2L4IEgF1owfOy1Wcy3jfUI6-zqyg\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"signature-key\");created=1777630843",
+        "signature": "sig=:f+eG9T8E0gTAVAdZsPraMOQlNi+Wa6QyG0pszbXDdsBS17R/iNTiALAZlpW7gF0jz9xt5cHcxPKasJIcGNbSAA==:",
         "accept": "*/*",
         "accept-language": "*",
         "sec-fetch-mode": "cors",
@@ -54,9 +60,9 @@
         "host": "127.0.0.1:19999",
         "connection": "keep-alive",
         "content-type": "application/json",
-        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiI0YTI4YzQ1YS1kNjQ1LTQzOWItOTBkNS1lMzBlZGFkYzA4NzIiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6ImFLUnJZWjVqRVNrV3VaSEpxaHI5dXk4UHZISXFQZlBKOS1zWm92OHdjSk0iLCJ5IjoiRHhuNGNtYXZXMlFPSTdYQmtBVHNDTEthNVdOWm1ubUNGeUhaNmhrbFg3MCIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzAyOTksImV4cCI6MTc3NzYzMDg5OSwicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9.xAtYGrpV4292dOUmj8XM06qZaUgNnEahfPTddhT4rDIbus6e2XvahoCMmg1ukBqwBbpJuQAv0C3VHipTbjDR3Q\"",
-        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"content-type\" \"signature-key\");created=1777630299",
-        "signature": "sig=:+bsf2enxOsQgUBDGxnZ1ET03sV1XN56RoiwBnhSp/bsDBpLopc8Ro/mWEDpKMYgUIPSD0o4w/hN/u4I6YrnOHA==:",
+        "signature-key": "sig=jwt;jwt=\"eyJhbGciOiJFUzI1NiIsInR5cCI6ImFhLWFnZW50K2p3dCIsImtpZCI6IjIwMjYtMDUtMDFfY2VkIn0.eyJpc3MiOiJodHRwczovL2NsYXdkcmV5LmNvbSIsImR3ayI6ImFhdXRoLWFnZW50Lmpzb24iLCJzdWIiOiJhYXV0aDpvcGVuY2xhd0BjbGF3ZHJleS5jb20iLCJqdGkiOiIzZGI0MTg5OS05YzU0LTRkOWUtODRhYy01MDFkNzI0YjcxMzAiLCJjbmYiOnsiandrIjp7Imt0eSI6IkVDIiwieCI6IlRyc1VjNENxNjJuZmw4MC1pTFBhaUhXV3FSOFJNNVhwbGVlbVVKQ2ItcVUiLCJ5IjoiQnh5QVNvdHpvS29Ra1dFZFE1RmFuR0tpSjNWN1N3RmlPUjI5UFJDc19LcyIsImNydiI6IlAtMjU2In19LCJpYXQiOjE3Nzc2MzA4NDMsImV4cCI6MTc3NzYzMTQ0MywicHMiOiJodHRwczovL3BlcnNvbi5oZWxsby1iZXRhLm5ldCJ9._3mt7uuP1WX20jSkUZhDwcTsXzPEUzfROo_pQEYCXx7oecExNlZ42kOMUV2L4IEgF1owfOy1Wcy3jfUI6-zqyg\"",
+        "signature-input": "sig=(\"@method\" \"@authority\" \"@path\" \"content-type\" \"signature-key\");created=1777630843",
+        "signature": "sig=:NTKvi44/fwr7j2JUp5iSICz9oHK0SO3vcrdKGFfNi/PHonx+44PMF9PwtohksHEAzS9oiZptZjVeTMC5r0RnbA==:",
         "accept": "*/*",
         "accept-language": "*",
         "sec-fetch-mode": "cors",

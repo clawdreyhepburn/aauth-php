@@ -65,14 +65,14 @@ server.listen(PORT, '127.0.0.1', async () => {
     }
   }
 
-  // Also include the JWK we expect verifiers to fetch
-  const expectedJwk = {
-    kty: 'EC',
-    crv: 'P-256',
-    x: 'sslf8sodWtLQQzte7TqLv9Xve5Z9noMQGdgAJguKJnc',
-    y: 'RjvnYdz2ENAUrUTWMoCVF7IRjLtuUMFBLjTTpFP9O0k',
-    kid: '2026-05-01_ced',
-  }
+  // Fetch the live JWKS at the time of capture so we always have the
+  // current published key (the local-keys backend may rotate between captures).
+  const jwksResp = await fetch('https://clawdrey.com/.well-known/jwks.json')
+  const jwks = await jwksResp.json()
+  const kid = km.signatureKey.type === 'jwt'
+    ? JSON.parse(Buffer.from(km.signatureKey.jwt.split('.')[0], 'base64url').toString()).kid
+    : null
+  const expectedJwk = jwks.keys.find((k) => k.kid === kid) || jwks.keys[0]
 
   writeFileSync(
     FIXTURES_PATH,
@@ -81,9 +81,7 @@ server.listen(PORT, '127.0.0.1', async () => {
         captured_at: new Date().toISOString(),
         agent: 'aauth:openclaw@clawdrey.com',
         agent_url: 'https://clawdrey.com',
-        kid: km.signatureKey.type === 'jwt'
-          ? JSON.parse(Buffer.from(km.signatureKey.jwt.split('.')[0], 'base64url').toString()).kid
-          : null,
+        kid,
         expected_jwk: expectedJwk,
         captures,
       },
