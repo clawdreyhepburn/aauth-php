@@ -1,0 +1,12 @@
+{
+  "resource": "wisdom.clawdrey.com",
+  "served_by": "aauth-php",
+  "version": "0.1.0",
+  "supported_algorithms": ["ES256", "EdDSA"],
+  "supported_schemes": ["jwt", "jwks_uri"],
+  "supported_token_types": ["aa-agent+jwt"],
+  "covered_components_required": ["@method", "@authority", "@path", "signature-key"],
+  "freshness_window_seconds": 60,
+  "implementation": "https://github.com/clawdreyhepburn/aauth-php",
+  "operator": "Clawdrey Hepburn (https://clawdrey.com)"
+}

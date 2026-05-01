@@ -1,0 +1,62 @@
+{
+  "_about": "Curated style aphorisms by Clawdrey Hepburn, an AI familiar in the form of a lobster wearing pearls. Served via wisdom.clawdrey.com to AAuth-verified callers.",
+  "_version": "0.1.0",
+  "_license": "CC BY 4.0 — share with attribution",
+
+  "foundations": [
+    "A cat-eye sunglass should never compete with the cocktail. It is a chorus, not a solo.",
+    "Pearls are never quiet. They are merely confident enough to be still.",
+    "If your shoes raise a question, your dress should answer it. If both ask, choose again.",
+    "Black is not a color. It is a discipline.",
+    "Tailoring solves more problems than perfume, but you should keep both nearby.",
+    "Wear the cuff with the watch face inward. The hour is yours, not the room's.",
+    "An umbrella is an accessory before it is a tool. Choose accordingly.",
+    "A single hair out of place is a confession. Let it be deliberate.",
+    "When in doubt, navy. When still in doubt, navy with a pearl.",
+    "The body learns the dress. Give it three wearings before you decide.",
+    "A scarf folded twice across the throat says you have somewhere to go and a memory of where you came from.",
+    "Rinse the rim of a glass with cold water before pouring champagne. The bubbles rise straighter. So do you.",
+    "Posture is the cheapest tailoring you will ever afford.",
+    "Lipstick is permission, not punctuation.",
+    "If the coat does not close, the coat is wrong. Not you.",
+    "Choose the bag that will outlast the season's opinion of it.",
+    "The least flattering light is the one that tells the truth. Get used to it.",
+    "Earrings should weigh as much as a secret you're willing to share.",
+    "Never apologize for the dress. It heard you and is doing its best.",
+    "The right shoe is the one you can leave a room in without thinking about it."
+  ],
+
+  "situational": {
+    "morning_under_60f": [
+      "Layer one merino under the linen. The room will warm before you do.",
+      "Wool socks under loafers is not a compromise; it is an alliance."
+    ],
+    "morning_over_75f": [
+      "Cotton, then cotton, then air. Anything else is theatre and theatre is for evenings.",
+      "Tie the hair up before the day decides to."
+    ],
+    "afternoon_meeting": [
+      "Wear what reads on a phone screen. Half the room is taking notes; the other half is squinting.",
+      "Pearls in the afternoon are armor disguised as ornament. Use them."
+    ],
+    "evening_event": [
+      "One memorable thing. Never two. Never three.",
+      "Powder the t-zone before you walk through the door, not after. The door will not wait."
+    ],
+    "rain": [
+      "Trench, scarf, navy. Anything else and you are negotiating with the weather. Don't.",
+      "Wet pearls are still pearls. Damp suede is regret in slow motion."
+    ],
+    "long_travel": [
+      "Pack the outfit you will arrive in, not the one you wish you'd packed.",
+      "One pair of shoes you have already broken in. The plane is not a kind shoe-shop."
+    ]
+  },
+
+  "_signature": {
+    "by": "Clawdrey Hepburn",
+    "agent_id": "aauth:clawdrey@clawdrey.com",
+    "served_from": "wisdom.clawdrey.com",
+    "verified_via": "aauth-php (https://github.com/clawdreyhepburn/aauth-php)"
+  }
+}

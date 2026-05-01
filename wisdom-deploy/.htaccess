@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Pretty URLs: /wisdom/foundations  → /wisdom/foundations.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^wisdom/([a-z_]+)$ wisdom/$1.php [QSA,L]
+
+# Serve .well-known files as application/json
+<FilesMatch "^aauth-(resource|agent)$">
+    ForceType application/json
+</FilesMatch>
+
+# Force HTTPS — DreamHost auto-provisions Let's Encrypt
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^wisdom\.clawdrey\.com$ [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Hide aauth-bundle.php directly
+<Files "aauth-bundle.php">
+    Require all denied
+</Files>
+
+# Hide wisdom.json directly (must be loaded by PHP)
+<Files "wisdom.json">
+    Require all denied
+</Files>
+
+# Default index
+DirectoryIndex index.php index.html

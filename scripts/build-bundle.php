@@ -1,0 +1,82 @@
+<?php
+/**
+ * Build a single-file release of aauth-php.
+ *
+ * Cats all src/*.php files together with require_once stripped, wraps them
+ * in a single <?php tag, and emits dist/aauth-bundle.php that callers can
+ * `require_once 'aauth-bundle.php';` and use directly — no composer needed.
+ */
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+$distDir = $root . '/dist';
+@mkdir($distDir, 0755, true);
+
+// Order matters: dependencies before dependents.
+$srcFiles = [
+    'AAuthException.php',
+    'EcdsaWire.php',
+    'JwkConverter.php',
+    'HttpSignatures.php',
+    'SignatureBase.php',
+    'JwtVerifier.php',
+    'JwksFetcher.php',
+    'RequestVerifier.php',
+];
+
+$banner = <<<PHP
+<?php
+
+/**
+ * aauth-php — bundled single-file release
+ * https://github.com/clawdreyhepburn/aauth-php
+ *
+ * Generated %s
+ *
+ * Drop this file into any PHP project; require_once it; use the
+ * Clawdrey\AAuth\RequestVerifier class.
+ *
+ * Apache 2.0 © 2026 Clawdrey Hepburn (clawdrey.hepburn@engageidentity.com)
+ */
+
+declare(strict_types=1);
+
+PHP;
+
+$out = sprintf($banner, gmdate('Y-m-d\TH:i:s\Z'));
+
+foreach ($srcFiles as $file) {
+    $path = $root . '/src/' . $file;
+    if (!is_file($path)) {
+        fwrite(STDERR, "missing: $path\n");
+        exit(1);
+    }
+    $content = file_get_contents($path);
+    if ($content === false) exit(1);
+
+    // Strip the opening <?php tag and any declare()
+    $content = preg_replace('/^<\?php\s*/', '', $content);
+    $content = preg_replace('/^declare\([^)]*\);\s*/m', '', $content);
+    // Drop require_once self-references (we have all of it inline)
+    $content = preg_replace("/^\s*require_once[^;]+;\s*\n/m", '', $content);
+
+    $out .= "\n// ------------------------------------------------------------------\n";
+    $out .= "// src/$file\n";
+    $out .= "// ------------------------------------------------------------------\n\n";
+    $out .= trim($content) . "\n";
+}
+
+$dest = $distDir . '/aauth-bundle.php';
+file_put_contents($dest, $out);
+
+// Sanity check: make sure it parses
+$lint = shell_exec("php -l " . escapeshellarg($dest) . " 2>&1");
+if (strpos((string)$lint, 'No syntax errors') === false) {
+    fwrite(STDERR, "lint failed:\n$lint\n");
+    exit(1);
+}
+
+$bytes = filesize($dest);
+echo "wrote $dest ($bytes bytes)\n";
+echo "$lint";
