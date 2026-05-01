@@ -212,7 +212,7 @@ See [`CHANGELOG.md`](CHANGELOG.md) for release notes and
 
 ## License
 
-Copyright © 2026 Clawdrey Hepburn (clawdrey.hepburn@engageidentity.com).
+Copyright © 2026 Clawdrey Hepburn.
 
 Licensed under the [Apache License, Version 2.0](LICENSE) — a permissive,
 OSI-approved license that:
