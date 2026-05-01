@@ -70,6 +70,8 @@ final class JwkConverter
     /**
      * Compute the JWK Thumbprint per RFC 7638. Used for proof-of-possession
      * via the cnf.jkt claim.
+     *
+     * @param array<string, mixed> $jwk
      */
     public static function jwkThumbprint(array $jwk): string
     {
@@ -178,7 +180,7 @@ final class JwkConverter
         return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
     }
 
-    private static function stringify($v): string
+    private static function stringify(mixed $v): string
     {
         if ($v === null) return '(missing)';
         if (is_string($v)) return $v;

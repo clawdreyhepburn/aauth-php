@@ -58,10 +58,10 @@ foreach ($srcFiles as $file) {
     if ($content === false) exit(1);
 
     // Strip the opening <?php tag and any declare()
-    $content = preg_replace('/^<\?php\s*/', '', $content);
-    $content = preg_replace('/^declare\([^)]*\);\s*/m', '', $content);
+    $content = (string)preg_replace('/^<\?php\s*/', '', $content);
+    $content = (string)preg_replace('/^declare\([^)]*\);\s*/m', '', $content);
     // Drop require_once self-references (we have all of it inline)
-    $content = preg_replace("/^\s*require_once[^;]+;\s*\n/m", '', $content);
+    $content = (string)preg_replace("/^\s*require_once[^;]+;\s*\n/m", '', $content);
 
     $out .= "\n// ------------------------------------------------------------------\n";
     $out .= "// src/$file\n";

@@ -73,12 +73,7 @@ final class JwksFetcher
             throw new MalformedRequestException("metadata at $wellKnown lacks jwks_uri");
         }
 
-        $jwks = $this->fetchJson($jwksUri);
-        if (!isset($jwks['keys']) || !is_array($jwks['keys'])) {
-            throw new MalformedRequestException("JWKS at $jwksUri lacks keys array");
-        }
-
-        return $jwks;
+        return $this->validateJwks($this->fetchJson($jwksUri), $jwksUri);
     }
 
     /**
@@ -88,11 +83,31 @@ final class JwksFetcher
      */
     public function fetchJwks(string $jwksUri): array
     {
-        $jwks = $this->fetchJson($jwksUri);
-        if (!isset($jwks['keys']) || !is_array($jwks['keys'])) {
-            throw new MalformedRequestException("JWKS at $jwksUri lacks keys array");
+        return $this->validateJwks($this->fetchJson($jwksUri), $jwksUri);
+    }
+
+    /**
+     * Coerce a fetched JSON document into our strict {keys: list<...>} shape.
+     *
+     * @param array<string, mixed> $body
+     * @return array{keys: list<array<string, mixed>>}
+     */
+    private function validateJwks(array $body, string $url): array
+    {
+        $rawKeys = $body['keys'] ?? null;
+        if (!is_array($rawKeys) || !array_is_list($rawKeys)) {
+            throw new MalformedRequestException("JWKS at $url lacks keys array");
         }
-        return $jwks;
+        $keys = [];
+        foreach ($rawKeys as $i => $k) {
+            if (!is_array($k)) {
+                throw new MalformedRequestException(
+                    "JWKS at $url has non-object entry at keys[$i]"
+                );
+            }
+            $keys[] = $k;
+        }
+        return ['keys' => $keys];
     }
 
     /**

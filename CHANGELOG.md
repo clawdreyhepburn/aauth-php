@@ -59,6 +59,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Removed deprecated `curl_close()` call (no-op since PHP 8.0, deprecated in 8.5)
   from `JwksFetcher` to silence the deprecation warning on PHP 8.5.
+- `RequestVerifier` and `JwtVerifier` now explicitly assert that EdDSA signatures
+  and public keys are non-empty strings before calling
+  `sodium_crypto_sign_verify_detached`. PHP would already have thrown a
+  `TypeError` here, but a clean library exception is friendlier and proves
+  intent to PHPStan.
+- `JwksFetcher::fetchTwoStep()` and `fetchJwks()` now validate that `keys` is
+  actually a list of objects, rejecting malformed JWKS responses (where `keys`
+  is a string-keyed map or contains non-object entries) with a clear error.
+
+### Added — quality gates
+- `phpstan/phpstan` ^2.1 as a dev dependency, configured at level 8 (the
+  highest non-strict level). All `src/` and `scripts/` are clean at level 8.
+- `phpstan.neon.dist` configuration committed.
+- `composer check` runs the full quality gate: `composer validate --strict`,
+  test suite, doc-snippet lint, and PHPStan level 8 — in one command.
+- CI runs PHPStan on PHP 8.3 in addition to lint and tests.
 
 ## [0.1.0] — 2026-05-01
 

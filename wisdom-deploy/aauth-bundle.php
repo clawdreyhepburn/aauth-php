@@ -208,10 +208,14 @@ final class EcdsaWire
         }
         $bytes = '';
         while ($len > 0) {
-            $bytes = chr($len & 0xFF) . $bytes;
+            /** @var int<0, 255> $byte */
+            $byte = $len & 0xFF;
+            $bytes = chr($byte) . $bytes;
             $len >>= 8;
         }
-        return chr(0x80 | strlen($bytes)) . $bytes;
+        /** @var int<0, 255> $prefix */
+        $prefix = 0x80 | strlen($bytes);
+        return chr($prefix) . $bytes;
     }
 
     /**
@@ -311,6 +315,8 @@ final class JwkConverter
     /**
      * Compute the JWK Thumbprint per RFC 7638. Used for proof-of-possession
      * via the cnf.jkt claim.
+     *
+     * @param array<string, mixed> $jwk
      */
     public static function jwkThumbprint(array $jwk): string
     {
@@ -419,7 +425,7 @@ final class JwkConverter
         return rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
     }
 
-    private static function stringify($v): string
+    private static function stringify(mixed $v): string
     {
         if ($v === null) return '(missing)';
         if (is_string($v)) return $v;
@@ -523,10 +529,18 @@ final class HttpSignatures
         $scheme = $m[2];
         $paramsTail = $m[3];
 
+        // parseParams(asString: true) never produces ints, but PHPStan can't
+        // see that across the boolean flag, so cast here.
+        $rawParams = self::parseParams($paramsTail, asString: true);
+        $params = [];
+        foreach ($rawParams as $k => $v) {
+            $params[$k] = (string)$v;
+        }
+
         return [
             'label' => $label,
             'scheme' => $scheme,
-            'params' => self::parseParams($paramsTail, asString: true),
+            'params' => $params,
         ];
     }
 
@@ -730,9 +744,9 @@ final class JwtVerifier
     /**
      * Verify a compact JWS and return its decoded payload claims.
      *
-     * @param string                                       $jwt          compact JWS
-     * @param callable(string $kid, ?string $iss): array  $resolveJwk   given a kid (and optionally iss),
-     *                                                                  return the JWK to verify against
+     * @param string                                                $jwt          compact JWS
+     * @param callable(string $kid, ?string $iss): (array<string, mixed>|null)  $resolveJwk   given a kid (and optionally iss),
+     *                                                                  return the JWK to verify against (or null if unknown)
      * @param array{
      *   leeway?: int,
      *   require_iat?: bool,
@@ -828,7 +842,7 @@ final class JwtVerifier
             throw new JwtException('JWT missing required iat');
         }
 
-        if (isset($opts['issuer']) && $opts['issuer'] !== null) {
+        if (isset($opts['issuer'])) {
             if (($payload['iss'] ?? null) !== $opts['issuer']) {
                 throw new JwtException(sprintf(
                     'JWT iss mismatch: expected %s, got %s',
@@ -838,7 +852,7 @@ final class JwtVerifier
             }
         }
 
-        if (isset($opts['audience']) && $opts['audience'] !== null) {
+        if (isset($opts['audience'])) {
             $aud = $payload['aud'] ?? null;
             $audList = is_array($aud) ? $aud : [$aud];
             if (!in_array($opts['audience'], $audList, true)) {
@@ -880,6 +894,9 @@ final class JwtVerifier
             if ($key['type'] !== 'ed25519') {
                 throw new JwtException('alg=EdDSA requires Ed25519 JWK');
             }
+            if ($sig === '' || !is_string($key['public']) || $key['public'] === '') {
+                throw new JwtException('EdDSA verification got an empty signature or key');
+            }
             $ok = sodium_crypto_sign_verify_detached($sig, $signingInput, $key['public']);
             if (!$ok) {
                 throw new JwtException('Ed25519 signature verification failed');
@@ -890,7 +907,7 @@ final class JwtVerifier
         throw new JwtException("unsupported alg: $alg");
     }
 
-    private static function stringify($v): string
+    private static function stringify(mixed $v): string
     {
         if ($v === null) return 'null';
         if (is_string($v)) return $v;
@@ -972,12 +989,7 @@ final class JwksFetcher
             throw new MalformedRequestException("metadata at $wellKnown lacks jwks_uri");
         }
 
-        $jwks = $this->fetchJson($jwksUri);
-        if (!isset($jwks['keys']) || !is_array($jwks['keys'])) {
-            throw new MalformedRequestException("JWKS at $jwksUri lacks keys array");
-        }
-
-        return $jwks;
+        return $this->validateJwks($this->fetchJson($jwksUri), $jwksUri);
     }
 
     /**
@@ -987,11 +999,31 @@ final class JwksFetcher
      */
     public function fetchJwks(string $jwksUri): array
     {
-        $jwks = $this->fetchJson($jwksUri);
-        if (!isset($jwks['keys']) || !is_array($jwks['keys'])) {
-            throw new MalformedRequestException("JWKS at $jwksUri lacks keys array");
+        return $this->validateJwks($this->fetchJson($jwksUri), $jwksUri);
+    }
+
+    /**
+     * Coerce a fetched JSON document into our strict {keys: list<...>} shape.
+     *
+     * @param array<string, mixed> $body
+     * @return array{keys: list<array<string, mixed>>}
+     */
+    private function validateJwks(array $body, string $url): array
+    {
+        $rawKeys = $body['keys'] ?? null;
+        if (!is_array($rawKeys) || !array_is_list($rawKeys)) {
+            throw new MalformedRequestException("JWKS at $url lacks keys array");
         }
-        return $jwks;
+        $keys = [];
+        foreach ($rawKeys as $i => $k) {
+            if (!is_array($k)) {
+                throw new MalformedRequestException(
+                    "JWKS at $url has non-object entry at keys[$i]"
+                );
+            }
+            $keys[] = $k;
+        }
+        return ['keys' => $keys];
     }
 
     /**
@@ -1290,6 +1322,11 @@ final class RequestVerifier
                 throw new InvalidSignatureException('ES256 signature verification failed');
             }
         } elseif ($alg === 'EdDSA') {
+            if (!is_string($publicKey) || $publicKey === '' || $sigBytes === '') {
+                throw new InvalidSignatureException(
+                    'EdDSA verification got an empty signature or key'
+                );
+            }
             if (!sodium_crypto_sign_verify_detached($sigBytes, $signatureBase, $publicKey)) {
                 throw new InvalidSignatureException('Ed25519 signature verification failed');
             }
@@ -1318,6 +1355,8 @@ final class RequestVerifier
     }
 
     /**
+     * @param array{scheme: string, params: array<string, mixed>} $sigKey
+     *
      * @return array{
      *   alg: 'ES256'|'EdDSA',
      *   public: \OpenSSLAsymmetricKey|string,

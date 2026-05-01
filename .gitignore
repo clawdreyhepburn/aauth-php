@@ -1,6 +1,7 @@
 vendor/
 composer.lock
 .phpunit.result.cache
+.phpstan.cache/
 *.log
 .DS_Store
 

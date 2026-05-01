@@ -24,9 +24,9 @@ final class JwtVerifier
     /**
      * Verify a compact JWS and return its decoded payload claims.
      *
-     * @param string                                       $jwt          compact JWS
-     * @param callable(string $kid, ?string $iss): array  $resolveJwk   given a kid (and optionally iss),
-     *                                                                  return the JWK to verify against
+     * @param string                                                $jwt          compact JWS
+     * @param callable(string $kid, ?string $iss): (array<string, mixed>|null)  $resolveJwk   given a kid (and optionally iss),
+     *                                                                  return the JWK to verify against (or null if unknown)
      * @param array{
      *   leeway?: int,
      *   require_iat?: bool,
@@ -122,7 +122,7 @@ final class JwtVerifier
             throw new JwtException('JWT missing required iat');
         }
 
-        if (isset($opts['issuer']) && $opts['issuer'] !== null) {
+        if (isset($opts['issuer'])) {
             if (($payload['iss'] ?? null) !== $opts['issuer']) {
                 throw new JwtException(sprintf(
                     'JWT iss mismatch: expected %s, got %s',
@@ -132,7 +132,7 @@ final class JwtVerifier
             }
         }
 
-        if (isset($opts['audience']) && $opts['audience'] !== null) {
+        if (isset($opts['audience'])) {
             $aud = $payload['aud'] ?? null;
             $audList = is_array($aud) ? $aud : [$aud];
             if (!in_array($opts['audience'], $audList, true)) {
@@ -174,6 +174,9 @@ final class JwtVerifier
             if ($key['type'] !== 'ed25519') {
                 throw new JwtException('alg=EdDSA requires Ed25519 JWK');
             }
+            if ($sig === '' || !is_string($key['public']) || $key['public'] === '') {
+                throw new JwtException('EdDSA verification got an empty signature or key');
+            }
             $ok = sodium_crypto_sign_verify_detached($sig, $signingInput, $key['public']);
             if (!$ok) {
                 throw new JwtException('Ed25519 signature verification failed');
@@ -184,7 +187,7 @@ final class JwtVerifier
         throw new JwtException("unsupported alg: $alg");
     }
 
-    private static function stringify($v): string
+    private static function stringify(mixed $v): string
     {
         if ($v === null) return 'null';
         if (is_string($v)) return $v;

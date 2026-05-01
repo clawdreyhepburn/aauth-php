@@ -1,0 +1,11 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - scripts
+    excludePaths:
+        - dist
+        - tests/fixtures
+        - vendor
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false

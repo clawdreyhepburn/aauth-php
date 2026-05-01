@@ -38,7 +38,18 @@
     },
     "scripts": {
         "test": "php tests/run-all.php",
-        "build-bundle": "php scripts/build-bundle.php"
+        "build-bundle": "php scripts/build-bundle.php",
+        "lint-docs": "php scripts/lint-doc-snippets.php",
+        "phpstan": "phpstan analyse --no-progress --memory-limit=512M",
+        "check": [
+            "@composer validate --strict",
+            "@test",
+            "@lint-docs",
+            "@phpstan"
+        ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
+    }
 }

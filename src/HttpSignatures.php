@@ -94,10 +94,18 @@ final class HttpSignatures
         $scheme = $m[2];
         $paramsTail = $m[3];
 
+        // parseParams(asString: true) never produces ints, but PHPStan can't
+        // see that across the boolean flag, so cast here.
+        $rawParams = self::parseParams($paramsTail, asString: true);
+        $params = [];
+        foreach ($rawParams as $k => $v) {
+            $params[$k] = (string)$v;
+        }
+
         return [
             'label' => $label,
             'scheme' => $scheme,
-            'params' => self::parseParams($paramsTail, asString: true),
+            'params' => $params,
         ];
     }
 

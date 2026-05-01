@@ -178,6 +178,11 @@ final class RequestVerifier
                 throw new InvalidSignatureException('ES256 signature verification failed');
             }
         } elseif ($alg === 'EdDSA') {
+            if (!is_string($publicKey) || $publicKey === '' || $sigBytes === '') {
+                throw new InvalidSignatureException(
+                    'EdDSA verification got an empty signature or key'
+                );
+            }
             if (!sodium_crypto_sign_verify_detached($sigBytes, $signatureBase, $publicKey)) {
                 throw new InvalidSignatureException('Ed25519 signature verification failed');
             }
@@ -206,6 +211,8 @@ final class RequestVerifier
     }
 
     /**
+     * @param array{scheme: string, params: array<string, mixed>} $sigKey
+     *
      * @return array{
      *   alg: 'ES256'|'EdDSA',
      *   public: \OpenSSLAsymmetricKey|string,

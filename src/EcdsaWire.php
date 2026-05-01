@@ -159,10 +159,14 @@ final class EcdsaWire
         }
         $bytes = '';
         while ($len > 0) {
-            $bytes = chr($len & 0xFF) . $bytes;
+            /** @var int<0, 255> $byte */
+            $byte = $len & 0xFF;
+            $bytes = chr($byte) . $bytes;
             $len >>= 8;
         }
-        return chr(0x80 | strlen($bytes)) . $bytes;
+        /** @var int<0, 255> $prefix */
+        $prefix = 0x80 | strlen($bytes);
+        return chr($prefix) . $bytes;
     }
 
     /**

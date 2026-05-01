@@ -55,6 +55,14 @@ jobs:
       - name: Lint doc snippets
         run: php scripts/lint-doc-snippets.php
 
+      - name: Install Composer dev deps for PHPStan
+        if: matrix.php-version == '8.3'
+        run: composer install --no-interaction --no-progress --no-scripts
+
+      - name: PHPStan (level 8)
+        if: matrix.php-version == '8.3'
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M
+
   bundle-drift:
     name: bundle is up to date
     runs-on: ubuntu-latest
